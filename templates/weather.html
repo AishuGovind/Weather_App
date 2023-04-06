@@ -1,0 +1,52 @@
+{% extends 'index.html'%}
+{% block content%}
+<style>
+    .cbox{
+        padding: 10px solid black;
+    }
+</style>
+<div class="container-fluid" style="margin-top:50px">
+    <div class="col-md-offset-4 col-md-4">
+        <h2 class="page-header text-primary text-center" > <span class="fas fa-cloud-sun"></span>  Weather App</i></h2>
+        {% if messages%}
+          {% for message in messages%}
+            {% if message.tags == 'error' %}
+               <div class="alert alert-danger">{{message}}</div>
+            {% else %}
+                <div class="alert alert-{{message.tags}}">{{message}}</div>
+            {% endif %}
+          {% endfor %}
+        {% endif%}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+                {{form.name}}
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit"><span class="fa fa-add"></span>Add City</button>
+                </span>
+            </div>
+        </form>
+        {% for city in data %}
+        <div class="media cbox">
+            <div class="media-left">
+                <a href="#">
+                    <img src="http://openweathermap.org/img/w/{{city.icon}}.png" class="media-object" alt="Image">
+                </a>
+            </div>
+            <div class="media-body">
+                <h3 class="media-heading"><b>{{city.city}}</b></h3>                   
+                <h4>{{city.temperature}}&deg;C</h4>                   
+                <h4>{{city.description}}</h4>                   
+                <h4>{{city.country}}</h4> 
+                <h4>{{city.latitude}}, {{city.longtitude}}</h4>
+            </div>
+            <div class="media-right">
+              <h2><a href="{% url 'dcity' city.city%}" class="text-danger">&#x2718;</a></h2>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
